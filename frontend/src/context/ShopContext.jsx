@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { products } from "../assets/assets";
+import { toast } from "react-toastify";
 
 export const ShopContext = createContext();
 
@@ -8,6 +9,49 @@ const ShopContextProvider = (props) => {
   const delivery_fee = 10;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [cartItems, setCartItems] = useState({});
+
+  const addToCart = async (itemId, size) => {
+    // copy of cartItems
+    let cartData = structuredClone(cartItems);
+
+    // size not given show error notification
+    if (!size) {
+      toast.error("Select Product Size");
+      return;
+    }
+
+    // Check if item already exists in cart
+    if (cartData[itemId]) {
+      // Check if specific size of item already exists
+      if (cartData[itemId][size]) {
+        cartData[itemId][size] += 1;
+      } else {
+        // If size not present, initialize with quantity 1
+        cartData[itemId][size] = 1;
+      }
+    } else {
+      // If item is not in cart, create new entry
+      cartData[itemId] = {};
+
+      // Add selected size with quantity 1
+      cartData[itemId][size] = 1;
+    }
+
+    setCartItems(cartData);
+  };
+
+  const getCartCount = () => {
+    let totalCount = 0;
+
+    for (const item in cartItems) {
+      for (const size in cartItems[item]) {
+        totalCount += cartItems[item][size];
+      }
+    }
+
+    return totalCount;
+  };
 
   const value = {
     products,
@@ -17,12 +61,13 @@ const ShopContextProvider = (props) => {
     setSearch,
     showSearch,
     setShowSearch,
+    cartItems,
+    addToCart,
+    getCartCount,
   };
 
   return (
-    <ShopContext.Provider value={value}>
-        {props.children}
-    </ShopContext.Provider>
+    <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
   );
 };
 
