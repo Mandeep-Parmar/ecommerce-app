@@ -7,12 +7,14 @@ import ProductItem from "../components/ProductItem";
 const Collection = () => {
   const { products } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
-  // stores filtered products after applying category and subcategory filters
+  // stores filtered products after applying filters and sorting
   const [filterProducts, setFilterProducts] = useState([]);
   // stores selected category values (Men, Women, Kids)
   const [category, setCategory] = useState([]);
   // stores selected subcategory values (Topwear, Bottomwear, Winterwear)
   const [subCategory, setSubCategory] = useState([]);
+  // stores selected sorting type (relevant, low-high, high-low)
+  const [sortType, setSortType] = useState("relavent");
 
   // handles adding/removing selected category filters
   const toggleCategory = (e) => {
@@ -34,33 +36,42 @@ const Collection = () => {
     }
   };
 
-  // applies filtering based on selected category and subcategory
+ // apply filtering and sorting on products based on selected options
   const applyFilter = () => {
     let productsCopy = products.slice();
 
+    // Category filter
     if (category.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         category.includes(item.category),
       );
     }
 
+    // SubCategory filter
     if (subCategory.length > 0) {
       productsCopy = productsCopy.filter((item) =>
         subCategory.includes(item.subCategory),
       );
     }
 
+    // SORTING LOGIC
+    if (sortType === "low-high") {
+      productsCopy.sort((a, b) => a.price - b.price);
+    } else if (sortType === "high-low") {
+      productsCopy.sort((a, b) => b.price - a.price);
+    }
+
     setFilterProducts(productsCopy);
   };
 
-  // re-apply filters whenever category or subcategory changes
+  // re-apply filters whenever filter options or products change
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
+  }, [category, subCategory, sortType, products]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
-      {/* Fileter Option */}
+      {/* Fileter Options */}
       <div className="min-w-60">
         <p
           className="my-2 text-xl flex items-center cursor-pointer gap-2"
@@ -153,8 +164,11 @@ const Collection = () => {
           <Title text1={"ALL"} text2={"COLLECTIONS"} />
 
           {/* Product Sort  */}
-          <select className="border-2 border-gray-300 text-sm px-2">
-            <option value="relevent">Sort by: Relevent</option>
+          <select
+            onChange={(e) => setSortType(e.target.value)}
+            className="border-2 border-gray-300 text-sm px-2"
+          >
+            <option value="relavent">Sort by: Relavent</option>
             <option value="low-high">Sort by: Low to High</option>
             <option value="high-low">Sort by: High to Low</option>
           </select>
