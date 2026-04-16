@@ -15,7 +15,7 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "User does not exist",
       });
@@ -24,13 +24,13 @@ const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Invalid credentials",
       });
     } else {
       const token = createToken(user._id);
-      res.status(500).json({ success: true, token });
+      res.json({ success: true, token });
     }
   } catch (error) {
     console.log(error);
@@ -46,7 +46,7 @@ const registerUser = async (req, res) => {
     // checking user already exist or not (through email)
     const exist = await User.findOne({ email });
     if (exist) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "User already exists",
       });
@@ -54,14 +54,14 @@ const registerUser = async (req, res) => {
 
     // validating email format and strong password
     if (!validator.isEmail(email)) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Please enter a valid email",
       });
     }
 
     if (password.length < 8) {
-      return res.status(400).json({
+      return res.json({
         success: false,
         message: "Please enter strong password",
       });
@@ -84,7 +84,7 @@ const registerUser = async (req, res) => {
     res.json({ success: true, token });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -100,14 +100,14 @@ const adminLogin = async (req, res) => {
       const token = jwt.sign(email + password, process.env.JWT_SECRET);
       res.json({ success: true, token });
     } else {
-      res.status(400).json({
+      res.json({
         success: false,
         message: "Invalid credentials",
       });
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 
