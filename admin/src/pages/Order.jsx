@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Remove = () => {
+const Order = () => {
   return (
     <div>
         
@@ -8,4 +8,4 @@ const Remove = () => {
   )
 }
 
-export default Remove
+export default Order
