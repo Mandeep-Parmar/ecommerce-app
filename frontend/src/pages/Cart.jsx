@@ -13,22 +13,24 @@ const Cart = () => {
 
   // Convert cartItems object → array whenever cart changes
   useEffect(() => {
-    const tempData = [];
+    if (products.length > 0) {
+      const tempData = [];
 
-    for (const item in cartItems) {
-      for (const size in cartItems[item]) {
-        if (cartItems[item][size] > 0) {
-          tempData.push({
-            _id: item,
-            size: size,
-            quantity: cartItems[item][size],
-          });
+      for (const item in cartItems) {
+        for (const size in cartItems[item]) {
+          if (cartItems[item][size] > 0) {
+            tempData.push({
+              _id: item,
+              size: size,
+              quantity: cartItems[item][size],
+            });
+          }
         }
       }
-    }
 
-    setCartData(tempData);
-  }, [cartItems]);
+      setCartData(tempData);
+    }
+  }, [cartItems, products]);
 
   return (
     <div className="border-t pt-14">
@@ -38,7 +40,6 @@ const Cart = () => {
 
       <div>
         {cartData.map((item, index) => {
-
           //  Find full product details using product ID
           const productData = products.find(
             (product) => product._id === item._id,
@@ -71,7 +72,6 @@ const Cart = () => {
                       {item.size}
                     </p>
                   </div>
-
                 </div>
               </div>
 
@@ -81,7 +81,7 @@ const Cart = () => {
                 min={1}
                 value={item.quantity}
                 onChange={(e) =>
-                  updateQuantity(item._id, item.size, Number(e.target.value)) 
+                  updateQuantity(item._id, item.size, Number(e.target.value))
                 }
                 className="border border-gray-400 max-w-10 sm:max-w-20 px-1 sm:px-2 "
               />
@@ -102,7 +102,7 @@ const Cart = () => {
         <div className="w-full sm:w-[450px]">
           <CartTotal />
           <div className="w-full text-end">
-            <button 
+            <button
               onClick={() => navigate("/place-order")}
               className="bg-black text-white text-sm my-8 px-8 py-3"
             >
@@ -111,8 +111,6 @@ const Cart = () => {
           </div>
         </div>
       </div>
-      
-      
     </div>
   );
 };
