@@ -256,15 +256,6 @@ const PlaceOrder = () => {
 
           {/*--------------- Payment method selection -------------- */}
           <div className="flex gap-3 flex-col lg:flex-row">
-            <div
-              onClick={() => setMethod("stripe")}
-              className="flex items-center gap-3 border border-gray-400 p-2 px-3 cursor-pointer hover:border-black"
-            >
-              <p
-                className={`min-w-3.5 h-3.5 border border-gray-400 rounded-full ${method === "stripe" ? "bg-green-400 border-green-500" : ""}`}
-              ></p>
-              <img src={assets.stripe_logo} alt="stripe" className="h-5 mx-4" />
-            </div>
 
             <div
               onClick={() => setMethod("razorpay")}
