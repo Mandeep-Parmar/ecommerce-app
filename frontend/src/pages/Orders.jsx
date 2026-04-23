@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Orders = () => {
-  const { backendUrl, token, currency } = useContext(ShopContext);
+  const { backendUrl, token, currency, navigate } = useContext(ShopContext);
 
   const [orderData, setOrderData] = useState([]);
 
@@ -59,8 +59,35 @@ const Orders = () => {
         <Title text1={"MY"} text2={"ORDERS"} />
       </div>
 
-      <div>
-        {orderData.map((item, index) => (
+      {orderData.length === 0 ? (
+        // empty orders
+        <div className="flex flex-col items-center justify-center mt-20 text-center">
+
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png"
+          alt="empty orders"
+          className="w-28 opacity-70"
+        />
+
+        <h2 className="text-xl font-semibold mt-5">
+          No Orders Yet
+        </h2>
+
+        <p className="text-gray-500 mt-2">
+          Looks like you haven’t placed any orders yet.
+        </p>
+
+        <button
+          onClick={() => navigate("/")}
+          className="mt-6 bg-black text-white px-6 py-2 text-sm hover:bg-gray-800"
+        >
+          Continue Shopping
+        </button>
+
+      </div>
+      ) : (
+        <div>
+          {orderData.map((item, index) => (
           <div
             key={index}
             className="py-4 border-t border-b border-gray-300 text-gray-700 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
@@ -108,8 +135,9 @@ const Orders = () => {
               </button>
             </div>
           </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

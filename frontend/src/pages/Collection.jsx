@@ -182,17 +182,29 @@ const Collection = () => {
         </div>
 
         {/* Map Products */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-          {filterProducts.map((item, index) => (
-            <ProductItem
-              key={index}
-              id={item._id}
-              image={item.image}
-              name={item.name}
-              price={item.price}
-            />
-          ))}
-        </div>
+        {filterProducts.length === 0 ? (
+          // empty products
+          <div className="border border-gray-200 rounded-md py-12 px-6 text-center text-gray-600">
+            <p className="text-lg font-medium text-gray-800">
+              No products found
+            </p>
+            <p className="mt-2 text-sm">
+              Try changing filters or search for something else.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
+            {filterProducts.map((item, index) => (
+              <ProductItem
+                key={index}
+                id={item._id}
+                image={item.image}
+                name={item.name}
+                price={item.price}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
