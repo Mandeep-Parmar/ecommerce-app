@@ -17,6 +17,21 @@ const placeOrder = async (req, res) => {
   try {
     const { userId, amount, address, items } = req.body;
 
+    if (!items || items.length === 0) {
+      return res.json({
+        success: false,
+        message: "Cart is empty",
+      });
+    }
+
+    if (!amount || amount <= 0) {
+      return res.json({ success: false, message: "Invalid amount" });
+    }
+
+    if (!address || !address.firstName) {
+      return res.json({ success: false, message: "Address required" });
+    }
+
     const orderData = {
       userId,
       items,
@@ -44,6 +59,21 @@ const placeOrder = async (req, res) => {
 const placeOrderRazorpay = async (req, res) => {
   try {
     const { userId, amount, address, items } = req.body;
+
+    if (!items || items.length === 0) {
+      return res.json({
+        success: false,
+        message: "Cart is empty",
+      });
+    }
+
+    if (!amount || amount <= 0) {
+      return res.json({ success: false, message: "Invalid amount" });
+    }
+
+    if (!address || !address.firstName) {
+      return res.json({ success: false, message: "Address required" });
+    }
 
     const orderData = {
       userId,

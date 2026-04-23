@@ -93,6 +93,12 @@ const PlaceOrder = () => {
         }
       }
 
+      // check empty cart
+      if (orderItems.length === 0) {
+        toast.error("Your cart is empty");
+        return;
+      }
+
       // for passing to the req.body
       let orderData = {
         address: formData,
