@@ -4,8 +4,14 @@ import User from "../models/userModel.js";
 const addToCart = async (req, res) => {
   try {
     const { userId, itemId, size } = req.body;
+    if (!userId || !itemId || !size) {
+      return res.json({ success: false, message: "Missing cart payload" });
+    }
 
     const userData = await User.findById(userId);
+    if (!userData) {
+      return res.json({ success: false, message: "User not found" });
+    }
     const cartData = userData.cartData;
 
     // Check if item already exists in cart
@@ -38,8 +44,20 @@ const addToCart = async (req, res) => {
 const updateCart = async (req, res) => {
   try {
     const { userId, itemId, size, quantity } = req.body;
+    if (!userId || !itemId || !size || quantity === undefined) {
+      return res.json({ success: false, message: "Missing cart payload" });
+    }
+    if (quantity < 0) {
+      return res.json({
+        success: false,
+        message: "Quantity cannot be negative",
+      });
+    }
 
     const userData = await User.findById(userId);
+    if (!userData) {
+      return res.json({ success: false, message: "User not found" });
+    }
     const cartData = userData.cartData;
 
     cartData[itemId][size] = quantity;
@@ -57,8 +75,14 @@ const updateCart = async (req, res) => {
 const getUserCart = async (req, res) => {
   try {
     const { userId } = req.body;
+    if (!userId) {
+      return res.json({ success: false, message: "Missing user id" });
+    }
 
     const userData = await User.findById(userId);
+    if (!userData) {
+      return res.json({ success: false, message: "User not found" });
+    }
     const cartData = userData.cartData;
 
     res.json({ success: true, cartData });

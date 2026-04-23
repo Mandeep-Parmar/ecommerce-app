@@ -4,7 +4,6 @@ import {
   allOrders,
   placeOrder,
   placeOrderRazorpay,
-  placeOrderStripe,
   updateStatus,
   userOrders,
   verifyRazorpay,

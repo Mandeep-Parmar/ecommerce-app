@@ -120,7 +120,10 @@ const ShopContextProvider = (props) => {
           if (cartItems[itemId][size] > 0) {
             totalAmount += itemInfo.price * cartItems[itemId][size];
           }
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+          toast.error(error.message);
+        }
       }
     }
 

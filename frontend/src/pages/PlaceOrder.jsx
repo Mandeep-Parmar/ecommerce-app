@@ -33,7 +33,7 @@ const PlaceOrder = () => {
 
   const onChangeHandler = (event) => {
     setFormData((currData) => {
-      return { ...currData, [event.target.name]: [event.target.value] };
+      return { ...currData, [event.target.name]: event.target.value };
     });
   };
 
@@ -102,7 +102,7 @@ const PlaceOrder = () => {
 
       switch (method) {
         //Api code for COD
-        case "cod":
+        case "cod": {
           const response = await axios.post(
             backendUrl + "/api/order/place",
             orderData,
@@ -117,8 +117,9 @@ const PlaceOrder = () => {
           }
 
           break;
+        }
 
-        case "razorpay":
+        case "razorpay": {
           const responseRazorpay = await axios.post(
             backendUrl + "/api/order/razorpay",
             orderData,
@@ -131,6 +132,7 @@ const PlaceOrder = () => {
           }
 
           break;
+        }
 
         default:
           break;
@@ -256,7 +258,6 @@ const PlaceOrder = () => {
 
           {/*--------------- Payment method selection -------------- */}
           <div className="flex gap-3 flex-col lg:flex-row">
-
             <div
               onClick={() => setMethod("razorpay")}
               className="flex items-center gap-3 border border-gray-400 p-2 px-3 cursor-pointer hover:border-black"

@@ -31,7 +31,7 @@ const placeOrder = async (req, res) => {
     await newOrder.save();
 
     // clear cart data
-    await User.findByIdAndDelete(userId, { cartData: {} });
+    await User.findByIdAndUpdate(userId, { cartData: {} });
 
     res.json({ success: true, message: "Order Placed" });
   } catch (error) {
@@ -67,7 +67,7 @@ const placeOrderRazorpay = async (req, res) => {
     await razorpayInstance.orders.create(options, (error, order) => {
       if (error) {
         console.log(error);
-        res.json({ success: false, message: error });
+        return res.json({ success: false, message: error.message });
       }
       res.json({ success: true, order });
     });
@@ -81,8 +81,18 @@ const placeOrderRazorpay = async (req, res) => {
 const verifyRazorpay = async (req, res) => {
   try {
     const { userId, razorpay_order_id } = req.body;
+    if (!userId || !razorpay_order_id) {
+      return res.json({ success: false, message: "Invalid payment payload" });
+    }
 
     const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
+    const localOrder = await Order.findById(orderInfo.receipt);
+    if (!localOrder) {
+      return res.json({ success: false, message: "Order not found" });
+    }
+    if (localOrder.userId !== userId) {
+      return res.json({ success: false, message: "Unauthorized order access" });
+    }
 
     // console.log(orderInfo);
 
@@ -133,6 +143,15 @@ const userOrders = async (req, res) => {
 const updateStatus = async (req, res) => {
   try {
     const { orderId, status } = req.body;
+    if (!orderId || !status) {
+      return res.json({
+        success: false,
+        message: "Order id and status are required",
+      });
+    }
+    if (!validOrderStatuses.includes(status)) {
+      return res.json({ success: false, message: "Invalid order status" });
+    }
 
     await Order.findByIdAndUpdate(orderId, { status });
     res.json({ success: true, message: "Status Updated" });
@@ -144,7 +163,6 @@ const updateStatus = async (req, res) => {
 
 export {
   placeOrder,
-  placeOrderStripe,
   placeOrderRazorpay,
   allOrders,
   userOrders,
