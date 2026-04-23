@@ -8,10 +8,9 @@ const Footer = () => {
         <div>
           <img src={assets.logo} alt="logo" className="mb-5 w-32" />
           <p className="w-full md:w-2/3 text-gray-600">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas vitae
-            atque doloremque cupiditate fugiat laboriosam iure itaque sequi
-            distinctio sint in perspiciatis, sunt officiis, explicabo temporibus
-            delectus. Inventore, perspiciatis non?
+            At Forever, we blend style, comfort, and affordability to bring you
+            the best fashion experience. Our mission is to deliver high-quality
+            products that inspire confidence and elevate your everyday look.
           </p>
         </div>
 

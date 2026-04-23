@@ -17,7 +17,8 @@ const NewsLatterBox = () => {
         Subscribe now & get 20% off
       </p>
       <p className="text-gray-400 mt-3">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        Stay updated with our latest collections, exclusive deals, and special
+        offers.
       </p>
       <form
         onSubmit={onSubmitHandler}
