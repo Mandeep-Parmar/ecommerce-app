@@ -179,9 +179,6 @@ const updateStatus = async (req, res) => {
         message: "Order id and status are required",
       });
     }
-    if (!validOrderStatuses.includes(status)) {
-      return res.json({ success: false, message: "Invalid order status" });
-    }
 
     await Order.findByIdAndUpdate(orderId, { status });
     res.json({ success: true, message: "Status Updated" });
