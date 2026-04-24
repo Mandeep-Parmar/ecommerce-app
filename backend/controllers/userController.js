@@ -97,6 +97,7 @@ const adminLogin = async (req, res) => {
       email === process.env.ADMIN_EMAIL &&
       password === process.env.ADMIN_PASSWORD
     ) {
+      // expiresIn always required object not string
       const token = jwt.sign({ email, password }, process.env.JWT_SECRET, {
         expiresIn: "12h",
       });

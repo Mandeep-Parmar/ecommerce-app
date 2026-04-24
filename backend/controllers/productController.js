@@ -14,6 +14,20 @@ const addProduct = async (req, res) => {
       bestseller,
     } = req.body;
 
+    if (
+      !name ||
+      !description ||
+      !price ||
+      !category ||
+      !subCategory ||
+      !sizes
+    ) {
+      return res.json({
+        success: false,
+        message: "Required fields missing",
+      });
+    }
+
     // Extract uploaded images from req.files
     // Multer stores files as arrays → take first file if exists
     const image1 = req.files.image1 && req.files.image1[0];
@@ -25,6 +39,13 @@ const addProduct = async (req, res) => {
     const images = [image1, image2, image3, image4].filter(
       (item) => item !== undefined,
     );
+
+    if (images.length === 0) {
+      return res.json({
+        success: false,
+        message: "At least one image is required",
+      });
+    }
 
     // Upload images to Cloudinary and get URLs
     // Waits for ALL uploads to finish
@@ -74,6 +95,10 @@ const listProducts = async (req, res) => {
 // function for removing product
 const removeProduct = async (req, res) => {
   try {
+    if (!req.body.id) {
+      return res.json({ success: false, message: "Product ID required" });
+    }
+
     await Product.findByIdAndDelete(req.body.id);
     res.json({ success: true, message: "Product removed" });
   } catch (error) {
@@ -86,7 +111,17 @@ const removeProduct = async (req, res) => {
 const singleProduct = async (req, res) => {
   try {
     const { productId } = req.body;
+
+    if (!productId) {
+      return res.json({ success: false, message: "Product ID required" });
+    }
+
     const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.json({ success: false, message: "Product not found" });
+    }
+
     res.json({ success: true, product });
   } catch (error) {
     console.log(error);
