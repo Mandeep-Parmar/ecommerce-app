@@ -4,6 +4,19 @@ A **production-ready full-stack e-commerce application** built with the MERN sta
 
 ---
 
+## 🌐 Live Demo
+
+-  **Frontend (User App)**  
+  https://forever-by-mandeep.vercel.app/
+
+-  **Admin Panel**  
+  https://forever-admin-by-mandeep.vercel.app/
+
+-  **Backend API**  
+  https://ecommerce-app-o0th.onrender.com/
+
+---
+
 ## Project Highlights
 
 - Modern React apps powered by Vite and Tailwind CSS
