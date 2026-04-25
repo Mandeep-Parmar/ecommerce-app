@@ -29,6 +29,14 @@ A **production-ready full-stack e-commerce application** built with the MERN sta
 
 ---
 
+## 🆕 Recent Updates
+
+- 🔐 Added **OTP-based email verification**
+- ✅ Improved **email validation logic**
+- 🛠️ Enhanced authentication flow for better reliability
+
+---
+
 ## Tech Stack
 
 ### Frontend (Customer)
@@ -128,6 +136,9 @@ CLOUDINARY_SECRET_KEY=your_secret
 
 RAZORPAY_KEY_ID=your_key
 RAZORPAY_KEY_SECRET=your_secret
+
+EMAIL_USER=your_email
+EMAIL_PASS=your_app_password
 ```
 
 ---
