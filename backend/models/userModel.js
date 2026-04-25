@@ -19,6 +19,16 @@ const userSchema = mongoose.Schema(
       type: Object,
       default: {},
     },
+    otp: {
+      type: String,
+    },
+    otpExpire: {
+      type: Date,
+    },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   //   By default: Empty objects {} are removed, With this: Keeps empty cart {} in DB

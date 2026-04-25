@@ -10,6 +10,7 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,8 +24,22 @@ const Login = () => {
         });
 
         if (response.data.success) {
+          toast.success(response.data.message || "OTP sent to your email");
+          setCurrentState("Verify OTP");
+        } else {
+          toast.error(response.data.message);
+        }
+      } else if (currentState === "Verify OTP") {
+        // send otp and email to backend
+        const response = await axios.post(backendUrl + "/api/user/verify-otp", {
+          email,
+          otp,
+        });
+
+        if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
+          toast.success(response.data.message || "Email verified successfully");
         } else {
           toast.error(response.data.message);
         }
@@ -64,7 +79,7 @@ const Login = () => {
         <hr className="border-none h-[1.5px] w-8 bg-gray-800" />
       </div>
 
-      {currentState !== "Login" && (
+      {currentState === "Sign Up" && (
         <input
           type="text"
           placeholder="Name"
@@ -74,43 +89,59 @@ const Login = () => {
         />
       )}
 
-      <input
-        type="email"
-        placeholder="Email"
-        onChange={(e) => setEmail(e.target.value)}
-        className="w-full px-3 py-2 border border-gray-800"
-        required
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={(e) => setPassword(e.target.value)}
-        className="w-full px-3 py-2 border border-gray-800"
-        required
-      />
+      {currentState !== "Verify OTP" && (
+        <>
+          <input
+            type="email"
+            placeholder="Email"
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-800"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-800"
+            required
+          />
+        </>
+      )}
 
-      <div className="w-full flex justify-between text-sm mt-[-8px]">
-        <p className="cursor-pointer ">Forgot your password?</p>
+      {currentState === "Verify OTP" && (
+        <input
+          type="text"
+          placeholder="Enter OTP"
+          onChange={(e) => setOtp(e.target.value)}
+          className="w-full px-3 py-2 border border-gray-800 tracking-widest text-center"
+          required
+        />
+      )}
 
-        {currentState === "Login" ? (
-          <p
-            onClick={() => setCurrentState("Sign Up")}
-            className="cursor-pointer"
-          >
-            Create Account
-          </p>
-        ) : (
-          <p
-            onClick={() => setCurrentState("Login")}
-            className="cursor-pointer"
-          >
-            Login Here
-          </p>
-        )}
-      </div>
+      {currentState !== "Verify OTP" && (
+        <div className="w-full flex justify-between text-sm mt-[-8px]">
+          <p className="cursor-pointer ">Forgot your password?</p>
+
+          {currentState === "Login" ? (
+            <p
+              onClick={() => setCurrentState("Sign Up")}
+              className="cursor-pointer"
+            >
+              Create Account
+            </p>
+          ) : (
+            <p
+              onClick={() => setCurrentState("Login")}
+              className="cursor-pointer"
+            >
+              Login Here
+            </p>
+          )}
+        </div>
+      )}
 
       <button className="bg-black text-white font-light px-8 py-2 mt-4 ">
-        {currentState === "Login" ? "Sign In" : "Sign Up"}
+        {currentState === "Login" ? "Sign In" : currentState === "Sign Up" ? "Sign Up" : "Verify OTP"}
       </button>
     </form>
   );
