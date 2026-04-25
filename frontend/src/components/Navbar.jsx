@@ -5,6 +5,8 @@ import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false); // for back the menu in small screen
+  // profile icon dropdown
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const {
     setShowSearch,
     getCartCount,
@@ -60,23 +62,41 @@ const Navbar = () => {
           <img
             src={assets.profile_icon}
             alt="profile"
-            onClick={() => (token ? null : navigate("/login"))}
+            onClick={() =>
+              token ? setDropdownVisible(!dropdownVisible) : navigate("/login")
+            }
             className="w-5 cursor-pointer"
           />
 
           {/* Dropdown menu (appears only when user is logged in) */}
           {token && (
-            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-              <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
-                <p onClick={() => navigate("/profile")} className="cursor-pointer hover:text-black">My Profile</p>
+            <div
+              className={`group-hover:block ${dropdownVisible ? "block" : "hidden"} absolute dropdown-menu right-0 pt-4 z-50`}
+            >
+              <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded shadow-md">
                 <p
-                  onClick={() => navigate("/orders")}
+                  onClick={() => {
+                    setDropdownVisible(false);
+                    navigate("/profile");
+                  }}
+                  className="cursor-pointer hover:text-black"
+                >
+                  My Profile
+                </p>
+                <p
+                  onClick={() => {
+                    setDropdownVisible(false);
+                    navigate("/orders");
+                  }}
                   className="cursor-pointer hover:text-black"
                 >
                   Orders
                 </p>
                 <p
-                  onClick={() => logout()}
+                  onClick={() => {
+                    setDropdownVisible(false);
+                    logout();
+                  }}
                   className="cursor-pointer hover:text-black"
                 >
                   Logout
