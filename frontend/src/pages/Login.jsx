@@ -83,6 +83,7 @@ const Login = () => {
         <input
           type="text"
           placeholder="Name"
+          value={name}
           onChange={(e) => setName(e.target.value)}
           className="w-full px-3 py-2 border border-gray-800"
           required
@@ -94,6 +95,7 @@ const Login = () => {
           <input
             type="email"
             placeholder="Email"
+            value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-3 py-2 border border-gray-800"
             required
@@ -101,6 +103,7 @@ const Login = () => {
           <input
             type="password"
             placeholder="Password"
+            value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-3 py-2 border border-gray-800"
             required
@@ -112,6 +115,7 @@ const Login = () => {
         <input
           type="text"
           placeholder="Enter OTP"
+          value={otp}
           onChange={(e) => setOtp(e.target.value)}
           className="w-full px-3 py-2 border border-gray-800 tracking-widest text-center"
           required
