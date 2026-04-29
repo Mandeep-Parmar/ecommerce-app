@@ -15,7 +15,8 @@ const generateOTP = () => {
 // Route for user login
 const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = req.body.email?.toLowerCase().trim();
 
     const user = await User.findOne({ email });
 
@@ -54,7 +55,8 @@ const loginUser = async (req, res) => {
 // Route for user register
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, password } = req.body;
+    const email = req.body.email?.toLowerCase().trim();
 
     // checking user already exist or not (through email)
     const exist = await User.findOne({ email });
@@ -108,7 +110,7 @@ const registerUser = async (req, res) => {
 
     const newUser = new User({
       name,
-      email: email.toLowerCase().trim(),
+      email,
       password: hashedPassword,
       otp,
       otpExpire: Date.now() + 5 * 60 * 1000, // 5 min
@@ -133,7 +135,8 @@ const registerUser = async (req, res) => {
 // vertify otp api
 const verifyOTP = async (req, res) => {
   try {
-    const { email, otp } = req.body;
+    const { otp } = req.body;
+    const email = req.body.email?.toLowerCase().trim();
 
     const user = await User.findOne({ email });
 
