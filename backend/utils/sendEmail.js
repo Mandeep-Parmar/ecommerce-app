@@ -1,4 +1,9 @@
 import nodemailer from "nodemailer";
+import dns from "dns";
+
+// Force Node.js to prefer IPv4 over IPv6.
+// This fixes timeout issues when deployed to Vercel/Render where IPv6 might hang.
+dns.setDefaultResultOrder("ipv4first");
 
 const sendEmail = async (to, subject, text) => {
   const transporter = nodemailer.createTransport({
