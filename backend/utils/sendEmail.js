@@ -7,18 +7,43 @@ dns.setDefaultResultOrder("ipv4first");
 
 const sendEmail = async (to, subject, text) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS, // App password
     },
   });
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to,
-    subject,
-    text,
+  await new Promise((resolve, reject) => {
+    // verify connection configuration
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(error);
+        reject(error);
+      } else {
+        console.log("Server is ready to take our messages");
+        resolve(success);
+      }
+    });
+  });
+
+  return new Promise((resolve, reject) => {
+    transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      text,
+    }, (err, info) => {
+      if (err) {
+        console.error("sendMail error", err);
+        reject(err);
+      } else {
+        console.log("sendMail success", info);
+        resolve(info);
+      }
+    });
   });
 };
 
