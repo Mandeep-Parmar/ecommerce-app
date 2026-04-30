@@ -7,15 +7,15 @@ dns.setDefaultResultOrder("ipv4first");
 
 const sendEmail = async (to, subject, text) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "smtp-relay.bravo.com",
     port: 587,
-    secure: false,
+    secure: false,  // true for 465, false for other ports
     requireTLS: true,
     connectionTimeout: 10000, // 10 seconds
     socketTimeout: 10000, // 10 seconds
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS, // App password
+      user: process.env.EMAIL_USER, // Your Brevo Login
+      pass: process.env.EMAIL_PASS, // Your Brevo SMTP Key
     },
   });
 
