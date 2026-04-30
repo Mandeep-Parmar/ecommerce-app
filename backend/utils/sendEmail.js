@@ -7,47 +7,35 @@ dns.setDefaultResultOrder("ipv4first");
 
 const sendEmail = async (to, subject, text) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp-relay.bravo.com",
+    host: "smtp-relay.brevo.com",
     port: 587,
-    secure: false,  // true for 465, false for other ports
-    requireTLS: true,
-    connectionTimeout: 10000, // 10 seconds
-    socketTimeout: 10000, // 10 seconds
+    secure: false, // true for 465, false for other ports
+    family: 4, // force IPv4 (important)
     auth: {
       user: process.env.EMAIL_USER, // Your Brevo Login
       pass: process.env.EMAIL_PASS, // Your Brevo SMTP Key
     },
   });
 
-  await new Promise((resolve, reject) => {
-    // verify connection configuration
-    transporter.verify(function (error, success) {
-      if (error) {
-        console.log(error);
-        reject(error);
-      } else {
-        console.log("Server is ready to take our messages");
-        resolve(success);
-      }
-    });
-  });
+  try {
+    // Verify connection
+    await transporter.verify();
+    console.log("SMTP server is ready");
 
-  return new Promise((resolve, reject) => {
-    transporter.sendMail({
+    // Send mail
+    const info = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to,
       subject,
       text,
-    }, (err, info) => {
-      if (err) {
-        console.error("sendMail error", err);
-        reject(err);
-      } else {
-        console.log("sendMail success", info);
-        resolve(info);
-      }
     });
-  });
+
+    console.log("Email sent:", info.messageId);
+    return info;
+  } catch (error) {
+    console.error("Email error:", error);
+    throw error;
+  }
 };
 
 export default sendEmail;
