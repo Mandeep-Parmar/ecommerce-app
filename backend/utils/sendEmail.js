@@ -8,8 +8,11 @@ dns.setDefaultResultOrder("ipv4first");
 const sendEmail = async (to, subject, text) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    connectionTimeout: 10000, // 10 seconds
+    socketTimeout: 10000, // 10 seconds
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS, // App password
